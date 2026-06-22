@@ -1,0 +1,8 @@
+{
+  "name": "Sprite Dinâmico",
+  "version": "1.0.0",
+  "manifest_version": 1,
+  "background": {
+    "url": "/index.html"
+  }
+}
