@@ -2,7 +2,11 @@
   "name": "Sprite Dinâmico",
   "version": "1.0.0",
   "manifest_version": 1,
-  "background": {
-    "url": "/index.html"
+  "action": {
+    "title": "Ativar Sprites",
+    "icon": "/icon.svg",
+    "popover": "/index.html",
+    "width": 300,
+    "height": 150
   }
 }
