@@ -4,5 +4,5 @@
   "author": "erickkz",
   "version": "1.0.0",
   "manifest_version": 1,
-  "background_url": "./background.html"
+  "background_url": "https://erickkz.github.io/movenpcowlbear/background.html"
 }
