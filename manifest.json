@@ -1,12 +1,77 @@
-{
-  "name": "Sprite Dinâmico",
-  "version": "1.0.0",
-  "manifest_version": 1,
-  "action": {
-    "title": "Ativar Sprites",
-    "icon": "/icon.svg",
-    "popover": "/index.html",
-    "width": 300,
-    "height": 150
-  }
-}
+import OBR from "https://esm.sh/@owlbear/rodeo";
+
+const tokenStates = {};
+const sufixos = { 
+  "NORTH": "_top.png", 
+  "SOUTH": "_bottom.png", 
+  "EAST": "_right.png", 
+  "WEST": "_left.png" 
+};
+
+OBR.onReady(() => {
+  console.log("🟢 EXTENSÃO LIGADA! Sistema de Sprites Ativo.");
+
+  OBR.scene.items.onChange((items) => {
+    const itemsToUpdate = [];
+
+    items.forEach((item) => {
+      // Garante que só afeta Personagens (Tokens)
+      if (item.layer !== "CHARACTER") return;
+
+      const state = tokenStates[item.id] || { x: item.position.x, y: item.position.y, dir: null };
+      const currentPos = item.position;
+
+      // Detecta se o token se moveu
+      if (state.x !== currentPos.x || state.y !== currentPos.y) {
+        const dx = currentPos.x - state.x;
+        const dy = currentPos.y - state.y;
+        let newDirection = state.dir;
+
+        // Define a direção dominante
+        if (Math.abs(dx) > Math.abs(dy)) {
+          newDirection = dx > 0 ? "EAST" : "WEST";
+        } else {
+          newDirection = dy > 0 ? "SOUTH" : "NORTH";
+        }
+
+        // Se a direção mudou desde o último movimento
+        if (newDirection !== state.dir) {
+          // Pegamos o nome do token no Owlbear (Ex: se o token se chamar "heroi", ele vira "heroi")
+          // Certifique-se de que o nome do Token na mesa seja idêntico ao início do arquivo (ex: heroi)
+          const nomeToken = item.name.toLowerCase().trim();
+          
+          if (nomeToken) {
+            // Reconstrói a URL apontando diretamente para o seu GitHub Pages
+            const novaUrl = `https://erickkz.github.io/movenpcowlbear/sprites/${nomeToken}${sufixos[newDirection]}`;
+            
+            console.log(`🚶‍♂️ Movimento para ${newDirection} detectado para o token: ${item.name}`);
+            console.log(`🔗 Atualizando para a URL: ${novaUrl}`);
+
+            itemsToUpdate.push({ id: item.id, newUrl: novaUrl });
+          }
+          
+          state.dir = newDirection;
+        }
+
+        state.x = currentPos.x;
+        state.y = currentPos.y;
+        tokenStates[item.id] = state;
+      }
+    });
+
+    // Aplica a troca de imagens no Owlbear
+    if (itemsToUpdate.length > 0) {
+      OBR.scene.items.updateItems(
+        itemsToUpdate.map(u => u.id),
+        (draftItems) => {
+          draftItems.forEach(draft => {
+            const update = itemsToUpdate.find(u => u.id === draft.id);
+            if (update) {
+              draft.image.url = update.newUrl;
+            }
+          });
+        }
+      );
+    }
+  });
+});
