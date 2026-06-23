@@ -3,7 +3,7 @@
   "description": "Troca o sprite do token baseado na direção do movimento",
   "author": "erickkz",
   "version": "1.0.0",
-  "manifestVersion": 1,
+  "manifest_version": 1,
   "permissions": ["SCENE_READ", "SCENE_ITEMS_READ", "SCENE_ITEMS_WRITE"],
   "background": {
     "script": "./background.js"
