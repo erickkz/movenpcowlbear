@@ -4,8 +4,5 @@
   "author": "erickkz",
   "version": "1.0.0",
   "manifest_version": 1,
-  "permissions": ["SCENE_READ", "SCENE_ITEMS_READ", "SCENE_ITEMS_WRITE"],
-  "background": {
-    "script": "./background.js"
-  }
+  "background_url": "./background.html"
 }
